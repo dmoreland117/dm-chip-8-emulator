@@ -15,3 +15,4 @@ Open in vs code and it should configure cmake automaticly on linux.
 # TODO
 * Set up a better build system
 * Add more Documentation.
+* Add input for exit and keys
