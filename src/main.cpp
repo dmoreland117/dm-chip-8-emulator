@@ -8,12 +8,13 @@
 
 bool isRunning = true;
 
+// Doesnt do anyrhing yet
 struct Settings {
     const char* filePath;
     bool debug = true;
     int stackSize = 12;
 };
-
+ 
 bool initSDL(SDL_Window** window, SDL_Renderer** renderer)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -62,22 +63,18 @@ void getArgs(int argc, char* argv[], Settings& settings)
 
 int main(int argc, char* argv[]){
     
-    Settings settings;
+    //Settings settings;
     DMChip_8 chip_8;
 
     SDL_Window* window;
     SDL_Renderer* renderer;
-    getArgs(argc, argv, settings);
+    //getArgs(argc, argv, settings);
 
     initSDL(&window, &renderer);
-
-    chip_8.reset();
-    if (!chip_8.loadRom("../test_roms/1-chip8-logo.ch8"))
+    if (!chip_8.loadRom("../test_roms/test_logo.ch8"))
     {
         std::cout << "Error: Failed to load rom." << std::endl;
     }
-        
-    chip_8.framebufferSetPixel(32, 16);
     
     while (isRunning)
     {
@@ -92,20 +89,20 @@ int main(int argc, char* argv[]){
         {
             for (size_t j = 0; j < 32; j++)
             {
-                if (chip_8.getFrameBuffer()[i * j]) {
+                if (chip_8.getFrameBuffer()[i + (64 * j)]) {
                     SDL_Rect rect;
                     rect.w = SCREEN_WIDTH / 64;
                     rect.h = SCREEN_HEIGHT / 32,
                     rect.x = i * rect.w;
-                    rect.y = j * rect.h;
+                    rect.y = j * rect.h; 
 
                     SDL_SetRenderDrawColor(renderer, 0x00, 0xff, 0x00, 0xff);
-                    SDL_RenderDrawRect(renderer, &rect);
+                    SDL_RenderFillRect(renderer, &rect);
                 }
             }
         }
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(4000); // TODO: set to the right speed.
+        SDL_Delay(3000); // TODO: set to the right speed.
     }
 }

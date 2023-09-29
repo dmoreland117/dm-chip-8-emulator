@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "types.h"
 
 #define ROM_LOAD_ADDR 0x200
@@ -50,7 +52,7 @@ public: //cpu functions.
 public: // framebuffer functions
     inline Byte* getFrameBuffer() { return &frameBuffer[0]; }
 
-    inline void  framebufferSetPixel(int x, int y)   { frameBuffer[x * y] = 1; }
+    inline void  framebufferSetPixel(int x, int y)   { frameBuffer[x + (64 * y)] = 1; }
     inline void  framebufferClearPixel(int x, int y) { frameBuffer[x * y] = 0; }
 
     void frameBufferClear();
@@ -71,6 +73,17 @@ public: // ram functions
     inline Byte ramWrite (Word addr, Byte val) { ram[addr] = val; }
 
     void ramClear();
+
+private:
+    void incPc(int i);
+    bool pushPcToStack();
+    Word popFromStack();
+
+    Word getOpcodeAddr(Word &opcode);
+    Byte getOpcodeVx(Word &opcode);
+    Byte getOpcodeVy(Word &opcode);
+    Byte getOpcodeByte(Word &opcode);
+    Byte getOpcodeNibble(Word &opcode);
 
 private:
     Chip_8_Registers registers;
